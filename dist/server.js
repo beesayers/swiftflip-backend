@@ -12,8 +12,8 @@ const app = (0, express_1.default)();
 const port = process.env.PORT || 8000;
 app.use(express_1.default.json());
 // return a message when you hit the root route, all in typescript
-app.get('/', (req, res) => {
-    res.json({ message: 'Good Flippin Deals App!' });
+app.get("/", (req, res) => {
+    res.json({ message: "Good Flippin Deals App!" });
 });
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

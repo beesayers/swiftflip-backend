@@ -1,18 +1,18 @@
-import express, { Express, Request, Response } from 'express';
-import dotenv from 'dotenv';
-import connectDB from './config/db';
+import express, { Request, Response } from "express";
+import dotenv from "dotenv";
+import connectDB from "./config/db";
 
 dotenv.config();
-connectDB();
+void connectDB();
 
-const app: Express = express();
-const port = process.env.PORT || 8000;
+const app = express();
+const port = process.env.PORT ?? "8000";
 
 app.use(express.json());
 
 // return a message when you hit the root route, all in typescript
-app.get('/', (req: Request, res: Response) => {
-  res.json({ message: 'Good Flippin Deals App!' });
+app.get("/", (req: Request, res: Response) => {
+  res.json({ message: "Good Flippin Deals App!" });
 });
 
 app.listen(port, () => {

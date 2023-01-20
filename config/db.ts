@@ -1,14 +1,16 @@
 import mongoose from "mongoose";
 mongoose.set("strictQuery", false);
 
-const connectDB = async () => {
+const connectDB = async (): Promise<void> => {
   try {
-    const MONGO_URI: string = process.env.MONGO_URI || "";
+    const MONGO_URI: string = process.env.MONGO_URI ?? "";
     const conn = await mongoose.connect(MONGO_URI);
 
     console.log(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (error: any) {
-    console.error(`Error: ${error.message}`);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(`Error (${error.name}): ${error.message}`);
+    }
     process.exit(1);
   }
 };

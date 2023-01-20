@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-mongoose_1.default.set('strictQuery', false);
+mongoose_1.default.set("strictQuery", false);
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const MONGO_URI = process.env.MONGO_URI || '';
+        const MONGO_URI = process.env.MONGO_URI || "";
         const conn = yield mongoose_1.default.connect(MONGO_URI);
         console.log(`MongoDB Connected: ${conn.connection.host}`);
     }
