@@ -9,7 +9,7 @@
     "yarn": "please-use-npm"
   },
   "scripts": {
-    "build": "npx tsc",
+    "build": "npm install && tsc",
     "start": "node dist/server.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q ./dist/server.js\"",
     "prettier": "prettier --write .",
