@@ -26,4 +26,4 @@ router.delete("/:id", (req: Request, res: Response) => {
   res.status(204).json({ message: `Delete Deal ${req.params.id}` });
 });
 
-module.exports = router;
+export default router;
