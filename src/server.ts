@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 import connectDB from "./config/db";
+import errorHandler from "./middleware/error";
 import ebayNotificationRouter from "./routes/ebay/notifications";
 
 dotenv.config();
@@ -17,6 +18,9 @@ app.use("/api/ebay/notifications", ebayNotificationRouter);
 app.get("/", (req: Request, res: Response) => {
   res.json({ message: "Good Flippin Deals App!" });
 });
+
+// error handler
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://${host}:${port}`);

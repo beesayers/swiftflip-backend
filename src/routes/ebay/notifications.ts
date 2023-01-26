@@ -12,8 +12,8 @@ const ebayNotificationRouter = express.Router();
 // getting all
 ebayNotificationRouter.get("/", (req: Request, res: Response) => {
   if (req.query.challenge_code === undefined) {
-    res.status(500).json({ message: "Please provide a challenge_code query" });
-    return;
+    res.status(403);
+    throw new Error("Please provide a challenge_code query");
   }
   const challengeCode = req.query.challenge_code as string;
   const challengeResponse = generateChallengeResponse(challengeCode);

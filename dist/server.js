@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 const express_1 = __importDefault(require("express"));
 const db_1 = __importDefault(require("./config/db"));
+const error_1 = __importDefault(require("./middleware/error"));
 const notifications_1 = __importDefault(require("./routes/ebay/notifications"));
 dotenv_1.default.config();
 void (0, db_1.default)();
@@ -19,6 +20,8 @@ app.use("/api/ebay/notifications", notifications_1.default);
 app.get("/", (req, res) => {
     res.json({ message: "Good Flippin Deals App!" });
 });
+// error handler
+app.use(error_1.default);
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at http://${host}:${port}`);
 });
