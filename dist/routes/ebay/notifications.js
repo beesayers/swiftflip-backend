@@ -10,10 +10,14 @@ const express_1 = __importDefault(require("express"));
 // get the verification token and endpoint from .env
 dotenv_1.default.config();
 const verificationToken = (_a = process.env.EBAY_VERIFICATION_TOKEN) !== null && _a !== void 0 ? _a : "";
-const endpoint = (_b = process.env.EBAY_ENDPOINT) !== null && _b !== void 0 ? _b : "";
+const endpoint = (_b = process.env.EBAY_ENDPOINT_URL) !== null && _b !== void 0 ? _b : "";
 const ebayNotificationRouter = express_1.default.Router();
 // getting all
 ebayNotificationRouter.get("/", (req, res) => {
+    if (req.query.challenge_code === undefined) {
+        res.status(500).json({ message: "Please provide a challenge_code query" });
+        return;
+    }
     const challengeCode = req.query.challenge_code;
     const challengeResponse = generateChallengeResponse(challengeCode);
     res
