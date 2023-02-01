@@ -10,8 +10,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "node dist/server.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q ./dist/server.js\"",
+    "start": "node dist/bin/www/server.js",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q ./dist/bin/www/server.js\"",
     "prettier": "prettier --write .",
     "lint": "eslint",
     "prepare": "husky install"
@@ -21,6 +21,7 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
     "mongoose": "^6.8.3"
   },
   "devDependencies": {

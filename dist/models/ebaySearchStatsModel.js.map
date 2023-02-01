@@ -1,0 +1,1 @@
+{"version":3,"file":"ebaySearchStatsModel.js","sourceRoot":"","sources":["../../src/models/ebaySearchStatsModel.ts"],"names":[],"mappings":";;;;;AAAA,wDAAgC;AAEhC,MAAM,qBAAqB,GAAG,IAAI,kBAAQ,CAAC,MAAM,CAC/C;IACE,GAAG,EAAE;QACH,IAAI,EAAE,MAAM;QACZ,QAAQ,EAAE,IAAI;KACf;CACF,EACD;IACE,UAAU,EAAE,IAAI;CACjB,CACF,CAAC;AAEF,kBAAe,kBAAQ,CAAC,KAAK,CAAC,iBAAiB,EAAE,qBAAqB,CAAC,CAAC"}
