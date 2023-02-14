@@ -69,7 +69,7 @@ export interface ISearchRequest extends Request {
             condition: string;
             sortOrder: string;
         };
-        ebaySearchResults: [IEbaySearchResult];
+        ebaySearchResults: IEbaySearchResult[];
         errorMessage: string;
         createdAt: Date;
         updatedAt: Date;
@@ -77,6 +77,13 @@ export interface ISearchRequest extends Request {
     };
     ebay?: {
         searchResults: [unknown];
-        searchCount: number;
+        cleanedResults?: IEbaySearchResult[];
+        stats?: {
+            min: number;
+            med: number;
+            avg: number;
+            max: number;
+            quantity: number;
+        };
     };
 }

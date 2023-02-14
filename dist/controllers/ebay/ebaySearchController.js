@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveSearchResults = exports.postEbaySearch = void 0;
+exports.saveSearchResults = exports.addStatistics = exports.cleanEbaySearchResults = exports.postEbaySearch = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const searchModel_1 = require("../../models/searchModel");
 const EBAY_ENDPOINT_PROD = (_a = process.env.EBAY_ENDPOINT_PROD) !== null && _a !== void 0 ? _a : "";
@@ -64,37 +64,102 @@ const postEbaySearch = (0, express_async_handler_1.default)(async (req, res, nex
     const json = await response.json();
     const countResults = json.findItemsAdvancedResponse[0].searchResult[0]["@count"];
     const ebaySearchResults = json.findItemsAdvancedResponse[0].searchResult[0].item;
-    console.log(`Call to Ebay API successful with ${countResults} results.`);
-    req.ebay = {
-        searchResults: ebaySearchResults,
-        searchCount: parseInt(countResults),
-    };
-    next();
+    ebaySearchResults === undefined
+        ? countResults === "0"
+            ? console.log(`2. No results returned from Ebay API.`)
+            : console.log(`2. Error when calling Ebay API.`)
+        : console.log(`2. Successful call to Ebay API. Returned ${countResults} results.`);
+    if (countResults !== "0") {
+        req.ebay = {
+            searchResults: ebaySearchResults,
+        };
+        next();
+    }
+    else {
+        res.status(200);
+        res.json({
+            _id: req.search._id,
+            message: "No results found.",
+            stats: {
+                quantity: 0,
+            },
+        });
+    }
 });
 exports.postEbaySearch = postEbaySearch;
-const saveSearchResults = (0, express_async_handler_1.default)(async (req, res, next) => {
-    if (req.search === undefined ||
-        req.ebay === undefined ||
-        req.ebay.searchResults === undefined ||
-        req.ebay.searchCount === undefined) {
+const cleanEbaySearchResults = (0, express_async_handler_1.default)(async (req, res, next) => {
+    var _a;
+    if (req.search === undefined || ((_a = req.ebay) === null || _a === void 0 ? void 0 : _a.searchResults) === undefined) {
         res.status(400);
         throw new Error("No ebaySearchResults provided to ebaySearchController");
     }
-    let counter = 0;
     const cleanedResults = [];
-    console.log(`Saving ${req.ebay.searchCount.toString()} results to database.`);
     for (const key in req.ebay.searchResults) {
         const cleanedResult = cleanEbaySearchResult(req.ebay.searchResults[key]);
         cleanedResults.push(cleanedResult);
-        console.log(`---- Result ${++counter} saved to database`);
+    }
+    if (cleanedResults.length === 0) {
+        console.log("3. Error cleaning Ebay search results.");
+    }
+    else {
+        console.log(`3. Successfully cleaned ${cleanedResults.length} Ebay search results.`);
+    }
+    req.ebay = {
+        ...req.ebay,
+        cleanedResults,
+    };
+    next();
+});
+exports.cleanEbaySearchResults = cleanEbaySearchResults;
+const addStatistics = (0, express_async_handler_1.default)(async (req, res, next) => {
+    var _a, _b, _c, _d, _e;
+    const sortedResults = [...((_b = (_a = req === null || req === void 0 ? void 0 : req.ebay) === null || _a === void 0 ? void 0 : _a.cleanedResults) !== null && _b !== void 0 ? _b : [])];
+    sortedResults.sort((a, b) => a.sellingStatus.currentPrice.__value__ - b.sellingStatus.currentPrice.__value__);
+    if (sortedResults.length === 0) {
+        console.log("4. Error adding statistics.");
+        throw new Error("Error adding statistics. Maybe no results?");
+    }
+    const min = Math.min(...((_c = sortedResults.map((result) => result.sellingStatus.currentPrice.__value__)) !== null && _c !== void 0 ? _c : [-1]));
+    const med = (_d = sortedResults[Math.floor(sortedResults.length / 2)].sellingStatus.currentPrice.__value__) !== null && _d !== void 0 ? _d : -1;
+    const avg = sortedResults.reduce((acc, result) => acc + Number(result.sellingStatus.currentPrice.__value__), 0) /
+        sortedResults.length;
+    const max = Math.max(...((_e = sortedResults.map((result) => result.sellingStatus.currentPrice.__value__)) !== null && _e !== void 0 ? _e : [-1]));
+    const quantity = sortedResults.length;
+    if (req.ebay !== undefined) {
+        req.ebay.stats = {
+            min,
+            med,
+            avg,
+            max,
+            quantity,
+        };
+    }
+    console.log(`4. Successfully added statistics.`);
+    console.log(`---- min: ${min}`);
+    console.log(`---- med: ${med}`);
+    console.log(`---- avg: ${avg}`);
+    console.log(`---- max: ${max}`);
+    console.log(`---- quantity: ${quantity}`);
+    next();
+});
+exports.addStatistics = addStatistics;
+const saveSearchResults = (0, express_async_handler_1.default)(async (req, res, next) => {
+    var _a;
+    if (req.search === undefined || ((_a = req.ebay) === null || _a === void 0 ? void 0 : _a.cleanedResults) === undefined) {
+        res.status(400);
+        throw new Error("No ebaySearchResults provided to ebaySearchController");
     }
     const searchDocument = await searchModel_1.Search.findOneAndUpdate({
         _id: req.search._id,
     }, {
-        ebaySearchResults: cleanedResults,
+        ebaySearchResults: req.ebay.cleanedResults,
+        stats: req.ebay.stats,
     }, {
         new: true,
     });
+    searchDocument === undefined
+        ? console.log("5. Error saving Ebay search results to database.")
+        : console.log("5. Successfully saved Ebay search results to database.");
     res.json(searchDocument);
 });
 exports.saveSearchResults = saveSearchResults;

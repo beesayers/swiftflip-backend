@@ -68,6 +68,13 @@ declare const searchSchema: mongoose.Schema<any, mongoose.Model<any, any, any, a
         condition?: string | undefined;
         sortOrder?: string | undefined;
     } | undefined;
+    stats?: {
+        min?: number | undefined;
+        med?: number | undefined;
+        avg?: number | undefined;
+        max?: number | undefined;
+        quantity?: number | undefined;
+    } | undefined;
 }>;
 declare const Search: mongoose.Model<{
     createdAt: NativeDate;
@@ -135,6 +142,13 @@ declare const Search: mongoose.Model<{
     filters?: {
         condition?: string | undefined;
         sortOrder?: string | undefined;
+    } | undefined;
+    stats?: {
+        min?: number | undefined;
+        med?: number | undefined;
+        avg?: number | undefined;
+        max?: number | undefined;
+        quantity?: number | undefined;
     } | undefined;
 }, {}, {}, {}, mongoose.Schema<any, mongoose.Model<any, any, any, any, any>, {}, {}, {}, {}, mongoose.ResolveSchemaOptions<{
     timestamps: true;
@@ -204,6 +218,13 @@ declare const Search: mongoose.Model<{
     filters?: {
         condition?: string | undefined;
         sortOrder?: string | undefined;
+    } | undefined;
+    stats?: {
+        min?: number | undefined;
+        med?: number | undefined;
+        avg?: number | undefined;
+        max?: number | undefined;
+        quantity?: number | undefined;
     } | undefined;
 }>>;
 export { Search, searchSchema };

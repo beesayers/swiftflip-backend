@@ -9,6 +9,13 @@ const searchSchema = new mongoose.Schema(
       sortOrder: String,
     },
     ebaySearchResults: [ebaySearchResultSchema],
+    stats: {
+      min: Number,
+      med: Number,
+      avg: Number,
+      max: Number,
+      quantity: Number,
+    },
     errorMessage: String,
   },
   {

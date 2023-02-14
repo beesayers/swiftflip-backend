@@ -13,6 +13,13 @@ const searchSchema = new mongoose_1.default.Schema({
         sortOrder: String,
     },
     ebaySearchResults: [ebaySearchResultModel_1.ebaySearchResultSchema],
+    stats: {
+        min: Number,
+        med: Number,
+        avg: Number,
+        max: Number,
+        quantity: Number,
+    },
     errorMessage: String,
 }, {
     timestamps: true,

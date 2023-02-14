@@ -21,7 +21,7 @@ const saveSearch = (0, express_async_handler_1.default)(async (req, res, next) =
             sortOrder: req.body.sortOrder,
         },
     });
-    console.log("Search saved to database: ", search);
+    console.log("\n1. Search request received for: ", search.keywords);
     req.search = search.toJSON();
     next();
 });

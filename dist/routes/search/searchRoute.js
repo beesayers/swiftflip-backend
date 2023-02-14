@@ -10,5 +10,5 @@ const searchController_1 = require("../../controllers/search/searchController");
 const searchRouter = express_1.default.Router();
 exports.searchRouter = searchRouter;
 // POST /api/search
-searchRouter.route("/").post(searchController_1.saveSearch, ebaySearchController_1.postEbaySearch, ebaySearchController_1.saveSearchResults);
+searchRouter.route("/").post(searchController_1.saveSearch, ebaySearchController_1.postEbaySearch, ebaySearchController_1.cleanEbaySearchResults, ebaySearchController_1.addStatistics, ebaySearchController_1.saveSearchResults);
 //# sourceMappingURL=searchRoute.js.map

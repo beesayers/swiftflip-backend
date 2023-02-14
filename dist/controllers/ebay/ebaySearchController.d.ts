@@ -5,9 +5,19 @@ declare const postEbaySearch: import("express").RequestHandler<import("express-s
     condition?: string | undefined;
     sortOrder?: string | undefined;
 }, import("qs").ParsedQs, Record<string, any>>;
+declare const cleanEbaySearchResults: import("express").RequestHandler<import("express-serve-static-core").ParamsDictionary, any, {
+    keywords?: string | undefined;
+    condition?: string | undefined;
+    sortOrder?: string | undefined;
+}, import("qs").ParsedQs, Record<string, any>>;
+declare const addStatistics: import("express").RequestHandler<import("express-serve-static-core").ParamsDictionary, any, {
+    keywords?: string | undefined;
+    condition?: string | undefined;
+    sortOrder?: string | undefined;
+}, import("qs").ParsedQs, Record<string, any>>;
 declare const saveSearchResults: import("express").RequestHandler<import("express-serve-static-core").ParamsDictionary, any, {
     keywords?: string | undefined;
     condition?: string | undefined;
     sortOrder?: string | undefined;
 }, import("qs").ParsedQs, Record<string, any>>;
-export { postEbaySearch, saveSearchResults };
+export { postEbaySearch, cleanEbaySearchResults, addStatistics, saveSearchResults };

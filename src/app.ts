@@ -1,9 +1,11 @@
+import cors from "cors";
 import express, { Request, Response } from "express";
 import errorHandler from "./middleware/error";
 import { ebayNotificationRouter } from "./routes/ebay/ebayNotificationRoute";
 import { searchRouter } from "./routes/search/searchRoute";
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use("/api/ebay/notifications", ebayNotificationRouter);
 app.use("/api/search", searchRouter);
