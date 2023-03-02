@@ -206,14 +206,14 @@ const cleanEbaySearchResult = (result: any): any => {
               : result.shippingInfo[0].shippingServiceCost[0]["@currencyId"],
           __value__:
             result.shippingInfo[0].shippingServiceCost === undefined
-              ? 0
+              ? -1
               : result.shippingInfo[0].shippingServiceCost[0].__value__,
         },
         shippingType: result.shippingInfo[0].shippingType[0],
         shipToLocations: result.shippingInfo[0].shipToLocations[0],
         expeditedShipping: result.shippingInfo[0].expeditedShipping[0],
         oneDayShippingAvailable: result.shippingInfo[0].oneDayShippingAvailable[0],
-        handlingTime: result.shippingInfo[0].handlingTime[0],
+        handlingTime: result.shippingInfo[0].handlingTime === undefined ? -1 : result.shippingInfo[0].handlingTime[0],
       },
       sellingStatus: {
         currentPrice: {
@@ -247,6 +247,7 @@ const cleanEbaySearchResult = (result: any): any => {
     return cleanedResult;
   } catch (error) {
     console.log(error);
+    console.log(result);
   }
 };
 
