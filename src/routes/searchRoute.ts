@@ -4,11 +4,10 @@ import {
   cleanEbaySearchResults,
   postEbaySearch,
   saveSearchResults,
-} from "../../controllers/ebay/ebaySearchController";
-import { saveSearch } from "../../controllers/search/searchController";
-const searchRouter = express.Router();
+} from "../controllers/ebay/ebaySearchController";
+import { saveSearch } from "../controllers/search/searchController";
+
+export const searchRouter = express.Router();
 
 // POST /api/search
 searchRouter.route("/").post(saveSearch, postEbaySearch, cleanEbaySearchResults, addStatistics, saveSearchResults);
-
-export { searchRouter };

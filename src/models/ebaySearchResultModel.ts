@@ -1,6 +1,7 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import { IEbaySearchResult } from "../config/types";
 
-const ebaySearchResultSchema = new mongoose.Schema(
+const ebaySearchResultSchema = new Schema<IEbaySearchResult>(
   {
     itemId: String,
     title: String,
@@ -60,9 +61,4 @@ const ebaySearchResultSchema = new mongoose.Schema(
   }
 );
 
-const EbaySearchResult = mongoose.model(
-  "EbaySearchResult",
-  ebaySearchResultSchema
-);
-
-export { EbaySearchResult, ebaySearchResultSchema };
+export const EbaySearchResultModel = mongoose.model<IEbaySearchResult>("EbaySearchResult", ebaySearchResultSchema);

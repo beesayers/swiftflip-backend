@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const errorHandler = (err, req, res, next) => {
     const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+    console.log("!!!! Using errorHandler middleware");
     res.status(statusCode);
     res.json({
         message: err.message,

@@ -5,17 +5,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
-const error_1 = __importDefault(require("./middleware/error"));
-const ebayNotificationRoute_1 = require("./routes/ebay/ebayNotificationRoute");
-const searchRoute_1 = require("./routes/search/searchRoute");
+const errorMiddleware_1 = __importDefault(require("./middleware/errorMiddleware"));
+const authRoute_1 = require("./routes/authRoute");
+const ebayNotificationRoute_1 = require("./routes/ebayNotificationRoute");
+const searchRoute_1 = require("./routes/searchRoute");
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use("/api/ebay/notifications", ebayNotificationRoute_1.ebayNotificationRouter);
 app.use("/api/search", searchRoute_1.searchRouter);
+app.use("/api/auth", authRoute_1.authRouter);
 app.get("/", (req, res) => {
-    res.json({ message: "Good Flippin Deals App!" });
+    res.json({ message: "Flip Swiftly, My Friend." });
 });
-app.use(error_1.default);
+app.use(errorMiddleware_1.default);
 exports.default = app;
 //# sourceMappingURL=app.js.map

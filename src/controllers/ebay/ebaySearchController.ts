@@ -1,7 +1,7 @@
 import { NextFunction, Response } from "express";
 import asyncHandler from "express-async-handler";
 import { ISearchRequest } from "../../config/types";
-import { Search } from "../../models/searchModel";
+import { SearchModel } from "../../models/searchModel";
 
 const EBAY_ENDPOINT_PROD = process.env.EBAY_ENDPOINT_PROD ?? "";
 const EBAY_APPID_PROD = process.env.EBAY_APPID_PROD ?? "";
@@ -162,7 +162,8 @@ const saveSearchResults = asyncHandler(
       res.status(400);
       throw new Error("No ebaySearchResults provided to ebaySearchController");
     }
-    const searchDocument = await Search.findOneAndUpdate(
+
+    const searchDocument = await SearchModel.findOneAndUpdate(
       {
         _id: req.search._id,
       },
@@ -178,6 +179,7 @@ const saveSearchResults = asyncHandler(
     searchDocument === undefined
       ? console.log("5. Error saving Ebay search results to database.")
       : console.log("5. Successfully saved Ebay search results to database.");
+
     res.json(searchDocument);
   }
 );

@@ -149,7 +149,7 @@ const saveSearchResults = (0, express_async_handler_1.default)(async (req, res, 
         res.status(400);
         throw new Error("No ebaySearchResults provided to ebaySearchController");
     }
-    const searchDocument = await searchModel_1.Search.findOneAndUpdate({
+    const searchDocument = await searchModel_1.SearchModel.findOneAndUpdate({
         _id: req.search._id,
     }, {
         ebaySearchResults: req.ebay.cleanedResults,

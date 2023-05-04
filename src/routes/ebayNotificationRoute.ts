@@ -1,5 +1,5 @@
 import express from "express";
-import { getEbayNotification } from "../../controllers/ebay/ebayNotificationController";
+import { getEbayNotification } from "../controllers/ebay/ebayNotificationController";
 const ebayNotificationRouter = express.Router();
 
 // getting all

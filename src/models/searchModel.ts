@@ -1,14 +1,15 @@
-import mongoose from "mongoose";
-import { ebaySearchResultSchema } from "./ebaySearchResultModel";
+import mongoose, { Schema } from "mongoose";
+import { ISearch } from "../config/types";
+import { EbaySearchResultModel } from "./ebaySearchResultModel";
 
-const searchSchema = new mongoose.Schema(
+const searchSchema = new Schema<ISearch>(
   {
     keywords: String,
     filters: {
       condition: String,
       sortOrder: String,
     },
-    ebaySearchResults: [ebaySearchResultSchema],
+    ebaySearchResults: [EbaySearchResultModel.schema],
     stats: {
       min: Number,
       med: Number,
@@ -23,6 +24,4 @@ const searchSchema = new mongoose.Schema(
   }
 );
 
-const Search = mongoose.model("Search", searchSchema);
-
-export { Search, searchSchema };
+export const SearchModel = mongoose.model<ISearch>("Search", searchSchema);

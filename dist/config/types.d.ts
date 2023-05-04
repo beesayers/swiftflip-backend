@@ -1,4 +1,5 @@
 import { Request } from "express";
+import { Document } from "mongoose";
 export interface IEbaySearchResult {
     itemId: string;
     title: string;
@@ -86,4 +87,46 @@ export interface ISearchRequest extends Request {
             quantity: number;
         };
     };
+}
+export interface ISearch extends Document {
+    keywords: string;
+    filters: {
+        condition: string;
+        sortOrder: string;
+    };
+    ebaySearchResults: IEbaySearchResult[];
+    stats: {
+        min: number;
+        med: number;
+        avg: number;
+        max: number;
+        quantity: number;
+    };
+    errorMessage: string;
+}
+export interface IUserActivity extends Document {
+    user: IUser;
+    activityType: string;
+    activityDetails: string;
+    createdAt: Date;
+}
+export interface IUser extends Document {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    createdAt: Date;
+    updatedAt: Date;
+    comparePassword: (password: string) => Promise<boolean>;
+    createSession: () => Promise<IUserSession>;
+    revokeSession: (token: string) => Promise<IUserSession>;
+}
+export interface IUserSession extends Document {
+    user: IUser;
+    token: string;
+    expiresAt: Date;
+    isValidToken: (token: string) => Promise<boolean>;
+}
+export interface IProfileRequest extends Request {
+    session: IUserSession;
 }

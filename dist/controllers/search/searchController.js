@@ -9,12 +9,12 @@ const searchModel_1 = require("../../models/searchModel");
 // @desc    save the user's search to the database
 // @route   POST /api/search
 // @access  Public
-const saveSearch = (0, express_async_handler_1.default)(async (req, res, next) => {
+exports.saveSearch = (0, express_async_handler_1.default)(async (req, res, next) => {
     if (req.body.keywords === undefined) {
         res.status(400);
         throw new Error("No keywords provided");
     }
-    const search = await searchModel_1.Search.create({
+    const search = await searchModel_1.SearchModel.create({
         keywords: req.body.keywords,
         filters: {
             condition: req.body.condition,
@@ -25,5 +25,4 @@ const saveSearch = (0, express_async_handler_1.default)(async (req, res, next) =
     req.search = search.toJSON();
     next();
 });
-exports.saveSearch = saveSearch;
 //# sourceMappingURL=searchController.js.map
