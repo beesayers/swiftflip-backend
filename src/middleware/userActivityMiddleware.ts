@@ -26,5 +26,7 @@ export const logUserActivity = asyncHandler(
         createdAt: new Date(),
       });
     }
+
+    next();
   }
 );

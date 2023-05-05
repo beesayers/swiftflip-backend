@@ -26,7 +26,14 @@ exports.signup = (0, express_async_handler_1.default)(async (req, res, next) => 
         email,
         password,
     });
-    await user.save();
+    // catch errors for duplicate emails and invalid emails and invalid passwords
+    try {
+        await user.save();
+    }
+    catch (error) {
+        res.status(400);
+        throw new Error(error.message);
+    }
     // Create a new user session
     const session = await (await user.createSession()).populate("user", "-password");
     if (session == null) {

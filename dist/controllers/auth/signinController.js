@@ -20,10 +20,10 @@ exports.signin = (0, express_async_handler_1.default)(async (req, res, next) => 
         throw new Error("User not found");
     }
     // Verify the password using bcrypt
-    const isMatch = await (user === null || user === void 0 ? void 0 : user.comparePassword(password));
-    if (isMatch == null) {
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
         res.status(401);
-        throw new Error("Incorrect password");
+        throw new Error("Incorrect email or password");
     }
     // Create a new user session
     const session = await (await (user === null || user === void 0 ? void 0 : user.createSession())).populate("user", "-password");

@@ -15,9 +15,6 @@ app.use(express_1.default.json());
 app.use("/api/ebay/notifications", ebayNotificationRoute_1.ebayNotificationRouter);
 app.use("/api/search", searchRoute_1.searchRouter);
 app.use("/api/auth", authRoute_1.authRouter);
-app.get("/", (req, res) => {
-    res.json({ message: "Flip Swiftly, My Friend." });
-});
 app.use(errorMiddleware_1.default);
 exports.default = app;
 //# sourceMappingURL=app.js.map

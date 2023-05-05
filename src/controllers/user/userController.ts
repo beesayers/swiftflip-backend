@@ -32,13 +32,25 @@ export const updateUserProfile = asyncHandler(
     req.session.user.email = req.body.email ?? req.session.user.email;
     req.body.password != null && (req.session.user.password = req.body.password);
 
-    const updatedUser = await req.session.user.save();
-    res.json({
-      _id: updatedUser._id,
-      firstName: updatedUser.firstName,
-      lastName: updatedUser.lastName,
-      email: updatedUser.email,
-    });
+    try {
+      // save the updated user data, and return the record without the password
+      const updatedUser = await req.session.user.save();
+      res.json({
+        message: "User profile updated successfully",
+        user: {
+          _id: updatedUser._id,
+          firstName: updatedUser.firstName,
+          lastName: updatedUser.lastName,
+          email: updatedUser.email,
+          createdAt: updatedUser.createdAt,
+          updatedAt: updatedUser.updatedAt,
+          __v: updatedUser.__v,
+        },
+      });
+    } catch (error: any) {
+      res.status(400);
+      throw new Error("Invalid email or password");
+    }
   }
 );
 
@@ -57,7 +69,7 @@ export const deleteUserProfile = asyncHandler(
     // Delete the user account
     const deletedUser = await UserModel.findByIdAndDelete(req.session.user._id);
     if (deletedUser != null) {
-      res.json({ message: "User account deleted successfully", user: deletedUser });
+      res.json({ message: "Profile deleted", user: deletedUser });
     } else {
       res.status(404);
       throw new Error("User not found");

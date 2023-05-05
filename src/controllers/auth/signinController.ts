@@ -22,11 +22,11 @@ export const signin = asyncHandler(
     }
 
     // Verify the password using bcrypt
-    const isMatch = await user?.comparePassword(password);
+    const isMatch = await user.comparePassword(password);
 
-    if (isMatch == null) {
+    if (!isMatch) {
       res.status(401);
-      throw new Error("Incorrect password");
+      throw new Error("Incorrect email or password");
     }
 
     // Create a new user session

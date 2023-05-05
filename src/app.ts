@@ -1,5 +1,6 @@
 import cors from "cors";
-import express, { Request, Response } from "express";
+import express from "express";
+
 import errorHandler from "./middleware/errorMiddleware";
 import { authRouter } from "./routes/authRoute";
 import { ebayNotificationRouter } from "./routes/ebayNotificationRoute";
@@ -11,10 +12,6 @@ app.use(express.json());
 app.use("/api/ebay/notifications", ebayNotificationRouter);
 app.use("/api/search", searchRouter);
 app.use("/api/auth", authRouter);
-
-app.get("/", (req: Request, res: Response) => {
-  res.json({ message: "Flip Swiftly, My Friend." });
-});
 
 app.use(errorHandler);
 

@@ -3,9 +3,12 @@ import { NextFunction, Request, Response } from "express";
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction): void => {
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
 
-  console.log("!!!! Using errorHandler middleware");
-
   res.status(statusCode);
+
+  console.log({
+    message: err.message,
+    stack: err.stack,
+  });
 
   res.json({
     message: err.message,

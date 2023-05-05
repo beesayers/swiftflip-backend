@@ -29,13 +29,26 @@ exports.updateUserProfile = (0, express_async_handler_1.default)(async (req, res
     req.session.user.lastName = (_b = req.body.lastName) !== null && _b !== void 0 ? _b : req.session.user.lastName;
     req.session.user.email = (_c = req.body.email) !== null && _c !== void 0 ? _c : req.session.user.email;
     req.body.password != null && (req.session.user.password = req.body.password);
-    const updatedUser = await req.session.user.save();
-    res.json({
-        _id: updatedUser._id,
-        firstName: updatedUser.firstName,
-        lastName: updatedUser.lastName,
-        email: updatedUser.email,
-    });
+    try {
+        // save the updated user data, and return the record without the password
+        const updatedUser = await req.session.user.save();
+        res.json({
+            message: "User profile updated successfully",
+            user: {
+                _id: updatedUser._id,
+                firstName: updatedUser.firstName,
+                lastName: updatedUser.lastName,
+                email: updatedUser.email,
+                createdAt: updatedUser.createdAt,
+                updatedAt: updatedUser.updatedAt,
+                __v: updatedUser.__v,
+            },
+        });
+    }
+    catch (error) {
+        res.status(400);
+        throw new Error("Invalid email or password");
+    }
 });
 exports.deleteUserProfile = (0, express_async_handler_1.default)(async (req, res, next) => {
     // Check if the session is present
@@ -50,7 +63,7 @@ exports.deleteUserProfile = (0, express_async_handler_1.default)(async (req, res
     // Delete the user account
     const deletedUser = await userModel_1.UserModel.findByIdAndDelete(req.session.user._id);
     if (deletedUser != null) {
-        res.json({ message: "User account deleted successfully", user: deletedUser });
+        res.json({ message: "Profile deleted", user: deletedUser });
     }
     else {
         res.status(404);
