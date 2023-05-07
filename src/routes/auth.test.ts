@@ -1,6 +1,7 @@
 import { disconnect } from "mongoose";
 import request from "supertest";
 import app from "../app";
+import connectDB from "../config/db";
 import { UserAccountModel } from "../models/userAccountModel";
 import { UserActivityModel } from "../models/userActivityModel";
 import { UserSessionModel } from "../models/userSessionModel";
@@ -16,9 +17,9 @@ async function createUserAccountAndGetToken(): Promise<any> {
   return signupResponse;
 }
 
-// beforeAll(async () => {
-//   await connectDB();
-// });
+beforeAll(async () => {
+  await connectDB();
+});
 
 afterEach(async () => {
   // Delete user account and should return user object

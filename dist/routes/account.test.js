@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const supertest_1 = __importDefault(require("supertest"));
 const app_1 = __importDefault(require("../app"));
+const db_1 = __importDefault(require("../config/db"));
 const userAccountModel_1 = require("../models/userAccountModel");
 const userActivityModel_1 = require("../models/userActivityModel");
 const userSessionModel_1 = require("../models/userSessionModel");
@@ -18,9 +19,9 @@ async function createUserAccountAndGetToken() {
     });
     return signupResponse;
 }
-// beforeAll(async () => {
-//   await connectDB();
-// });
+beforeAll(async () => {
+    await (0, db_1.default)();
+});
 afterEach(async () => {
     // Delete user account and should return user object
     const userAccount = await userAccountModel_1.UserAccountModel.findOneAndDelete({ email: "john.button@example.com" });
