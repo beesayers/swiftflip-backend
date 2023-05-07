@@ -33,6 +33,9 @@ const luxon_1 = require("luxon");
 const mongoose_1 = __importStar(require("mongoose"));
 const userSessionModel_1 = require("./userSessionModel");
 const userSchema = new mongoose_1.Schema({
+    userActivity: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "User" }],
+    userSessions: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "UserSession" }],
+    searchHistory: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Search" }],
     firstName: {
         type: String,
         required: true,

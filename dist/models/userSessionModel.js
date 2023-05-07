@@ -26,13 +26,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserSessionModel = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const userSessionSchema = new mongoose_1.Schema({
-    user: { type: mongoose_1.Schema.Types.ObjectId, ref: "User", required: true },
+    userAccount: { type: mongoose_1.Schema.Types.ObjectId, ref: "UserAccount", required: true },
     token: { type: String, unique: true, required: true },
     expiresAt: { type: Date, required: true },
 });
 userSessionSchema.methods.isValidToken = async function (token) {
-    const session = await exports.UserSessionModel.findOne({ token }).populate("user", "-password");
-    if (session === null || session.user._id === null) {
+    const session = await exports.UserSessionModel.findOne({ token }).populate("userAccount", "-password");
+    if (session === null || session.userAccount._id === null) {
         return false;
     }
     if (session.expiresAt < new Date()) {

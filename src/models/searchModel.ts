@@ -4,6 +4,7 @@ import { EbaySearchResultModel } from "./ebaySearchResultModel";
 
 const searchSchema = new Schema<ISearch>(
   {
+    userAccount: { type: Schema.Types.ObjectId, ref: "UserAccount", required: true },
     keywords: String,
     filters: {
       condition: String,

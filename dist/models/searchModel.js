@@ -27,6 +27,7 @@ exports.SearchModel = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const ebaySearchResultModel_1 = require("./ebaySearchResultModel");
 const searchSchema = new mongoose_1.Schema({
+    userAccount: { type: mongoose_1.Schema.Types.ObjectId, ref: "UserAccount", required: true },
     keywords: String,
     filters: {
         condition: String,

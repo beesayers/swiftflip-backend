@@ -15,7 +15,7 @@ export const requireAuth = asyncHandler(
     }
 
     // Find the session
-    const session: IUserSession | null = await UserSessionModel.findOne({ token }).populate("user", "-password");
+    const session: IUserSession | null = await UserSessionModel.findOne({ token }).populate("userAccount", "-password");
     if (session == null) {
       res.status(401);
       throw new Error("Unauthorized - No session");

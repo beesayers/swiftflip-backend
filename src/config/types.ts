@@ -95,6 +95,7 @@ export interface ISearchRequest extends Request {
 }
 
 export interface ISearch extends Document {
+  userAccount: IUserAccount;
   keywords: string;
   filters: {
     condition: string;
@@ -112,33 +113,35 @@ export interface ISearch extends Document {
 }
 
 export interface IUserActivity extends Document {
-  user: IUser;
+  userAccount: IUserAccount;
   activityType: string;
   activityDetails: string;
   createdAt: Date;
 }
 
 // User Account
-export interface IUser extends Document {
+export interface IUserAccount extends Document {
+  email: string;
   firstName: string;
   lastName: string;
-  email: string;
+  profilePicture: string;
+  subscription: string;
   password: string;
+  userSessions: IUserSession[];
+  searchHistory: ISearch[];
+  userActivity: IUserActivity[];
   createdAt: Date;
   updatedAt: Date;
   comparePassword: (password: string) => Promise<boolean>;
   createSession: () => Promise<IUserSession>;
+  createActivity: (activityType: string, activityDetails: string) => Promise<IUserActivity>;
   revokeSession: (token: string) => Promise<IUserSession>;
 }
 
 // User's sessions
 export interface IUserSession extends Document {
-  user: IUser;
+  userAccount: IUserAccount;
   token: string;
   expiresAt: Date;
   isValidToken: (token: string) => Promise<boolean>;
-}
-
-export interface IProfileRequest extends Request {
-  session: IUserSession;
 }
