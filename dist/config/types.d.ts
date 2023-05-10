@@ -57,6 +57,13 @@ export interface IEbaySearchResult {
     updatedAt: Date;
     __v: number;
 }
+export interface IStats {
+    min: number;
+    med: number;
+    avg: number;
+    max: number;
+    quantity: number;
+}
 export interface ISearchRequest extends Request {
     body: {
         keywords: string;
@@ -67,13 +74,7 @@ export interface ISearchRequest extends Request {
     session?: IUserSession;
     rawEbayResults?: any;
     cleanEbayResults?: IEbaySearchResult[];
-    stats?: {
-        min: number;
-        med: number;
-        avg: number;
-        max: number;
-        quantity: number;
-    };
+    stats?: IStats;
 }
 export interface ISearch extends Document {
     userAccount: IUserAccount;

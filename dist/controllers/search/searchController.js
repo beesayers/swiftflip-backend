@@ -64,20 +64,17 @@ exports.postEbaySearch = (0, express_async_handler_1.default)(async (req, res, n
     const REQUEST_DATA_FORMAT = "JSON";
     const RESPONSE_DATA_FORMAT = "JSON";
     const url = `${config_1.default.ebay.endpointProd}?OPERATION-NAME=${OPERATION_NAME}&SECURITY-APPNAME=${SECURITY_APPNAME}&RESPONSE-DATA-FORMAT=${RESPONSE_DATA_FORMAT}&REQUEST-DATA-FORMAT=${REQUEST_DATA_FORMAT}`;
-    const keywords = req.body.keywords;
-    const sortOrder = req.body.sortOrder;
-    const itemFilter = [];
-    const condition = req.body.condition;
-    if (conditionMap[condition] !== undefined) {
-        itemFilter.push({
-            name: "Condition",
-            value: condition,
-        });
+    if (conditionMap[req.body.condition] === undefined) {
+        res.status(400);
+        throw new Error("Invalid condition provided");
     }
     const body = {
-        keywords,
-        sortOrder,
-        itemFilter,
+        keywords: req.body.keywords,
+        sortOrder: req.body.sortOrder,
+        itemFilter: {
+            name: "Condition",
+            value: req.body.condition,
+        },
     };
     const options = {
         method: "POST",
@@ -90,11 +87,17 @@ exports.postEbaySearch = (0, express_async_handler_1.default)(async (req, res, n
     const json = await ebayResponse.json();
     const countResults = json.findItemsAdvancedResponse[0].searchResult[0]["@count"];
     const ebaySearchResults = json.findItemsAdvancedResponse[0].searchResult[0].item;
-    ebaySearchResults === undefined
-        ? countResults === "0"
-            ? console.log(`2. No results returned from Ebay API.`)
-            : console.log(`2. Error when calling Ebay API.`)
-        : console.log(`2. Successful call to Ebay API. Returned ${countResults} results.`);
+    if (ebaySearchResults === undefined) {
+        if (countResults === "0") {
+            console.log(`2. No results returned from Ebay API.`);
+        }
+        else {
+            console.log(`2. Error when calling Ebay API.`);
+            res.status(400);
+            throw new Error("Error when calling Ebay API.");
+        }
+    }
+    console.log(`2. Successful call to Ebay API. Returned ${countResults} results.`);
     if (countResults !== "0") {
         req.rawEbayResults = ebaySearchResults;
         next();
@@ -114,6 +117,7 @@ exports.cleanEbaySearchResults = (0, express_async_handler_1.default)(async (req
         res.status(400);
         throw new Error("No raw ebay results provided.");
     }
+    // Clean the results
     const cleanEbayResults = [];
     for (const key in req.rawEbayResults) {
         const cleanResult = cleanEbaySearchResult(req.rawEbayResults[key]);
@@ -129,11 +133,11 @@ exports.cleanEbaySearchResults = (0, express_async_handler_1.default)(async (req
     next();
 });
 exports.addStatistics = (0, express_async_handler_1.default)(async (req, res, next) => {
-    var _a, _b, _c;
     if (req.search === undefined || req.cleanEbayResults === undefined) {
         res.status(400);
         throw new Error("No clean ebay results provided.");
     }
+    // Sort the results by price
     const sortedResults = [...req.cleanEbayResults];
     sortedResults.sort((a, b) => a.sellingStatus.currentPrice.__value__ - b.sellingStatus.currentPrice.__value__);
     if (sortedResults.length === 0) {
@@ -141,25 +145,19 @@ exports.addStatistics = (0, express_async_handler_1.default)(async (req, res, ne
         res.status(400);
         throw new Error("Error sorting Ebay search results");
     }
-    const min = Math.min(...((_a = sortedResults.map((result) => result.sellingStatus.currentPrice.__value__)) !== null && _a !== void 0 ? _a : [-1]));
-    const med = (_b = sortedResults[Math.floor(sortedResults.length / 2)].sellingStatus.currentPrice.__value__) !== null && _b !== void 0 ? _b : -1;
-    const avg = sortedResults.reduce((acc, result) => acc + Number(result.sellingStatus.currentPrice.__value__), 0) /
-        sortedResults.length;
-    const max = Math.max(...((_c = sortedResults.map((result) => result.sellingStatus.currentPrice.__value__)) !== null && _c !== void 0 ? _c : [-1]));
-    const quantity = sortedResults.length;
-    req.stats = {
-        min,
-        med,
-        avg,
-        max,
-        quantity,
-    };
+    // Add statistics to the search
+    req.stats = calculateStats(sortedResults);
+    if (req.stats === undefined) {
+        console.log("4. Error calculating statistics");
+        res.status(400);
+        throw new Error("Error calculating statistics");
+    }
     console.log(`4. Successfully added statistics.`);
-    console.log(`---- min: ${min}`);
-    console.log(`---- med: ${med}`);
-    console.log(`---- avg: ${avg}`);
-    console.log(`---- max: ${max}`);
-    console.log(`---- quantity: ${quantity}`);
+    console.log(`---- min: ${req.stats.min}`);
+    console.log(`---- med: ${req.stats.med}`);
+    console.log(`---- avg: ${req.stats.avg}`);
+    console.log(`---- max: ${req.stats.max}`);
+    console.log(`---- quantity: ${req.stats.quantity}`);
     next();
 });
 exports.saveSearchResults = (0, express_async_handler_1.default)(async (req, res, next) => {
@@ -244,5 +242,21 @@ const cleanEbaySearchResult = (result) => {
         console.log(error);
         console.log(result);
     }
+};
+const calculateStats = (sortedResults) => {
+    var _a, _b, _c;
+    const min = Math.min(...((_a = sortedResults.map((result) => result.sellingStatus.currentPrice.__value__)) !== null && _a !== void 0 ? _a : [-1]));
+    const med = (_b = sortedResults[Math.floor(sortedResults.length / 2)].sellingStatus.currentPrice.__value__) !== null && _b !== void 0 ? _b : -1;
+    const avg = sortedResults.reduce((acc, result) => acc + Number(result.sellingStatus.currentPrice.__value__), 0) /
+        sortedResults.length;
+    const max = Math.max(...((_c = sortedResults.map((result) => result.sellingStatus.currentPrice.__value__)) !== null && _c !== void 0 ? _c : [-1]));
+    const quantity = sortedResults.length;
+    return {
+        min,
+        med,
+        avg,
+        max,
+        quantity,
+    };
 };
 //# sourceMappingURL=searchController.js.map

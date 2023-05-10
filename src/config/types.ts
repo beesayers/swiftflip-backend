@@ -60,6 +60,14 @@ export interface IEbaySearchResult {
   __v: number;
 }
 
+export interface IStats {
+  min: number;
+  med: number;
+  avg: number;
+  max: number;
+  quantity: number;
+}
+
 // Search Request from user
 // This should be refactored to split into SearchRequest / SearchResponse
 export interface ISearchRequest extends Request {
@@ -72,13 +80,7 @@ export interface ISearchRequest extends Request {
   session?: IUserSession;
   rawEbayResults?: any;
   cleanEbayResults?: IEbaySearchResult[];
-  stats?: {
-    min: number;
-    med: number;
-    avg: number;
-    max: number;
-    quantity: number;
-  };
+  stats?: IStats;
 }
 
 export interface ISearch extends Document {
