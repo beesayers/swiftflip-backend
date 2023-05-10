@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateProfilePicture = exports.deleteUserAccount = exports.updateUserAccount = exports.getUserAccount = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const stream_1 = require("stream");
-const cloudinaryConfig_1 = __importDefault(require("../../config/cloudinaryConfig"));
+const config_1 = __importDefault(require("../../config/config"));
 const userAccountModel_1 = require("../../models/userAccountModel");
 const userActivityModel_1 = require("../../models/userActivityModel");
 const userSessionModel_1 = require("../../models/userSessionModel");
@@ -91,7 +91,7 @@ exports.updateProfilePicture = (0, express_async_handler_1.default)(async (req, 
         readableStream.push(null);
         // Upload the image to Cloudinary
         const result = await new Promise((resolve, reject) => {
-            const uploadStream = cloudinaryConfig_1.default.uploader.upload_stream({
+            const uploadStream = config_1.default.cloudinary.uploader.upload_stream({
                 folder: "profile_pictures/",
                 public_id: userAccountId.toString(),
                 transformation: [{ width: 150, height: 150, crop: "fill" }],

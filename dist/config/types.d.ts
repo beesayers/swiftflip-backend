@@ -59,33 +59,20 @@ export interface IEbaySearchResult {
 }
 export interface ISearchRequest extends Request {
     body: {
-        keywords?: string;
-        condition?: string;
-        sortOrder?: string;
-    };
-    search?: {
-        _id: string;
         keywords: string;
-        filters: {
-            condition: string;
-            sortOrder: string;
-        };
-        ebaySearchResults: IEbaySearchResult[];
-        errorMessage: string;
-        createdAt: Date;
-        updatedAt: Date;
-        __v: number;
+        condition: string;
+        sortOrder: string;
     };
-    ebay?: {
-        searchResults: [unknown];
-        cleanedResults?: IEbaySearchResult[];
-        stats?: {
-            min: number;
-            med: number;
-            avg: number;
-            max: number;
-            quantity: number;
-        };
+    search?: ISearch;
+    session?: IUserSession;
+    rawEbayResults?: any;
+    cleanEbayResults?: IEbaySearchResult[];
+    stats?: {
+        min: number;
+        med: number;
+        avg: number;
+        max: number;
+        quantity: number;
     };
 }
 export interface ISearch extends Document {

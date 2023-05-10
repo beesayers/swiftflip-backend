@@ -3,11 +3,14 @@ import {
   addStatistics,
   cleanEbaySearchResults,
   postEbaySearch,
+  saveSearch,
   saveSearchResults,
-} from "../controllers/ebay/ebaySearchController";
-import { saveSearch } from "../controllers/search/searchController";
+} from "../controllers/search/searchController";
+import { requireAuth } from "../middleware/authMiddleware";
 
 export const searchRouter = express.Router();
 
 // POST /api/search
-searchRouter.route("/").post(saveSearch, postEbaySearch, cleanEbaySearchResults, addStatistics, saveSearchResults);
+searchRouter
+  .route("/")
+  .post(requireAuth, saveSearch, postEbaySearch, cleanEbaySearchResults, addStatistics, saveSearchResults);

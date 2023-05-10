@@ -4,13 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
+const config_1 = __importDefault(require("../config/config"));
 mongoose_1.default.set("strictQuery", false);
 const connectDB = async () => {
-    var _a;
     try {
-        const MONGO_URI = (_a = process.env.MONGO_URI) !== null && _a !== void 0 ? _a : "";
-        const conn = await mongoose_1.default.connect(MONGO_URI);
-        console.log(`MongoDB Connected: ${conn.connection.host}`);
+        const conn = await mongoose_1.default.connect(config_1.default.db.uri);
+        console.log(`⚡️⚡️[db]: MongoDB Connected: ${conn.connection.host}`);
     }
     catch (error) {
         if (error instanceof Error) {

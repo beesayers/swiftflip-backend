@@ -2,7 +2,7 @@ import { UploadApiResponse } from "cloudinary";
 import { NextFunction, Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import { Readable } from "stream";
-import cloudinary from "../../config/cloudinaryConfig";
+import config from "../../config/config";
 import { IUserSession } from "../../config/types";
 import { UserAccountModel } from "../../models/userAccountModel";
 import { UserActivityModel } from "../../models/userActivityModel";
@@ -103,7 +103,7 @@ export const updateProfilePicture = asyncHandler(
 
       // Upload the image to Cloudinary
       const result: UploadApiResponse = await new Promise((resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream(
+        const uploadStream = config.cloudinary.uploader.upload_stream(
           {
             folder: "profile_pictures/",
             public_id: userAccountId.toString(),
